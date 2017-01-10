@@ -26,7 +26,7 @@ public class Game implements ActionListener, MouseListener {
     
     public static Game runner;
     
-    public final int WIDTH = 500, HEIGHT = 600;
+    public final int WIDTH = 1300, HEIGHT = 600;
     
     public Renderer renderer;
     
@@ -40,9 +40,11 @@ public class Game implements ActionListener, MouseListener {
     
     public boolean gameOver, started;
     
+    public int timestamp = 0;
+    
     public Game(Object object) {
         JFrame jframe = new JFrame();
-        Timer timer = new Timer(20, this);
+        Timer timer = new Timer(10, this);
         
         renderer = new Renderer();
         rand = new Random();
@@ -60,13 +62,14 @@ public class Game implements ActionListener, MouseListener {
         columns = new ArrayList<Rectangle>();
         
         jumping = 0;
+        score = 0;
         
-        addColumn(true);
-        addColumn(true);
-        addColumn(true);
-        addColumn(true);
-        
+        for ( int i = 0; i<5; i++)
+        {
+            addColumn(true);
+        }
         timer.start();
+        
     }
 
     public void addColumn(boolean start) {
@@ -77,7 +80,7 @@ public class Game implements ActionListener, MouseListener {
         
         if (start)
         {
-            columns.add(new Rectangle(WIDTH + width + columns.size() * 900, HEIGHT - height - 120, width, height));
+            columns.add(new Rectangle(WIDTH + width + columns.size() * 900, HEIGHT - height - 140, width, height));
             //columns.add(new Rectangle(WIDTH + width + (columns.size() - 1) * 300, 0, width, HEIGHT - height - space));
         }
         else
@@ -134,16 +137,22 @@ public class Game implements ActionListener, MouseListener {
                 }
             }
             
-            //réinitialise le double saut quand 
-            if (man.y == 460) {
-                jumping = 0;
-            }
             if (man.y >= HEIGHT - 140 || man.y < 0) {
                 man.y = HEIGHT-140;
             }
             if (gameOver) {
                 man.y = HEIGHT - 120 - man.height;
             }
+            
+            //réinitialise le double saut quand 
+            if (man.y == 460) {
+                jumping = 0;
+            }
+            
+            timestamp++;
+            System.out.print(timestamp+" : ");
+            System.out.println(man.y);
+            System.out.println(jumping);
         }
         
         renderer.repaint();
@@ -168,8 +177,6 @@ public class Game implements ActionListener, MouseListener {
                 jumping++;
                 ymotion -= 10;
             }
-            System.out.println(jumping);
-            System.out.println(man.y);
             
         }
     }
@@ -200,6 +207,15 @@ public class Game implements ActionListener, MouseListener {
         if (!started) {
             g.drawString("Click to start", 75, HEIGHT/2);
         }
+        
+        g.setFont(new Font("Arial", 1, 50));
+        
+        if(started && !gameOver) {
+            score++;
+        }
+        String scoreString = "Score : "+ score;
+        g.drawString(scoreString, 20, HEIGHT-50);
+        
     }
     
     public static void main(String[] args) {
@@ -208,11 +224,11 @@ public class Game implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        jump();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        jump();
     }
 
     @Override
