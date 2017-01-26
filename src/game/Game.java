@@ -11,8 +11,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
@@ -22,78 +20,62 @@ import javax.swing.Timer;
  *
  * @author Poulet
  */
-public class Game implements ActionListener, MouseListener {
+public class Game implements ActionListener {
     
     public static Game runner;
     
-    public final int WIDTH = 1300, HEIGHT = 600;
+    public static Menu menu;
+    
+    public static final int WIDTH = 1300, HEIGHT = 600;
     
     public Renderer renderer;
     
-    public Rectangle man;
+    public Player player;
     
-    public int ticks, ymotion, score, jumping;
+    public int ticks, score;
     
-    public ArrayList<Rectangle> columns;
+    public Controller c;
     
-    public Random rand;
-    
-    public boolean gameOver, started;
+    public static boolean gameOver;
     
     public int timestamp = 0;
     
+    public static enum STATE {
+        MENU,
+        GAME,
+    };
+    public static STATE state = STATE.MENU;
+    
     public Game(Object object) {
         JFrame jframe = new JFrame();
-        Timer timer = new Timer(10, this);
+        Timer timer = new Timer(20, this);
         
         renderer = new Renderer();
-        rand = new Random();
+        
+        menu = new Menu();
+        
+        c = new Controller(runner);
         
         jframe.add(renderer);
+        
+        jframe.addMouseListener(new MouseInput());
+        
         jframe.setTitle("Runner");
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setSize(WIDTH, HEIGHT);
-        jframe.addMouseListener(this);
         jframe.setResizable(false);
         jframe.setVisible(true);
         
-        man = new Rectangle(WIDTH/2, HEIGHT/2, 20, 20);
+        player = new Player(WIDTH/3, HEIGHT/2, 20, 20);
         
-        columns = new ArrayList<Rectangle>();
-        
-        jumping = 0;
         score = 0;
         
-        for ( int i = 0; i<5; i++)
+        for (int i = 0; i<5; i++)
         {
-            addColumn(true);
+            c.addColumn(true);
         }
         timer.start();
         
-    }
-
-    public void addColumn(boolean start) {
-        //int space = 300;
-        int width = 10;
-        int height = 10 + rand.nextInt(80);
-        
-        
-        if (start)
-        {
-            columns.add(new Rectangle(WIDTH + width + columns.size() * 900, HEIGHT - height - 140, width, height));
-            //columns.add(new Rectangle(WIDTH + width + (columns.size() - 1) * 300, 0, width, HEIGHT - height - space));
-        }
-        else
-        {
-            columns.add(new Rectangle(columns.get(columns.size()-1).x + 600, HEIGHT - height - 120, width, height));
-            //columns.add(new Rectangle(columns.get(columns.size() - 1).x, 0, width+100, HEIGHT - height - space));
-        }
-        
-    }
-    
-    public void paintColumn(Graphics g, Rectangle column) {
-        g.setColor(Color.green.darker());
-        g.fillRect(column.x, column.y, column.width, column.height);
     }
     
     @Override
@@ -101,83 +83,60 @@ public class Game implements ActionListener, MouseListener {
         
         int speed = 10;
         
-        ticks++;
-        
-        if (started) {
-        
-            for (int i = 0; i < columns.size(); i++) {
-                Rectangle column = columns.get(i);
+        if (state == STATE.GAME) {
+            
+            ticks++;
+            
+            for (int i = 0; i < c.columns.size(); i++) {
+                Rectangle column = c.columns.get(i);
                 column.x -= speed;
             }
 
-            if (ticks % 2 == 0 && ymotion < 15){
-                ymotion += 2;
+            if (ticks % 2 == 0 && player.ymotion < 15){
+                player.ymotion += 2;
             }
 
-            for (int i = 0; i < columns.size(); i++) {
-                Rectangle column = columns.get(i);
+            for (int i = 0; i < c.columns.size(); i++) {
+                Rectangle column = c.columns.get(i);
 
                 if (column.x + column.width < 0) {
-                    columns.remove(column);
-                    addColumn(false);
+                    c.columns.remove(column);
+                    c.addColumn(false);
 
                     if(column.y == 0) {
-                        addColumn(false);
+                        c.addColumn(false);
                     }
                 }
             }
 
-            man.y += ymotion;
+            player.y += player.ymotion;
 
-            for (Rectangle column : columns) {
-                if (column.intersects(man)) {
+            for (Rectangle column : c.columns) {
+                if (column.intersects(player)) {
                     gameOver = true;
                     
-                    man.x = column.x - man.width;
+                    player.x = column.x - player.width;
                 }
             }
             
-            if (man.y >= HEIGHT - 140 || man.y < 0) {
-                man.y = HEIGHT-140;
+            if (player.y >= HEIGHT - 140 || player.y < 0) {
+                player.y = HEIGHT-140;
             }
             if (gameOver) {
-                man.y = HEIGHT - 120 - man.height;
+                player.y = HEIGHT - 120 - player.height;
             }
             
-            //réinitialise le double saut quand 
-            if (man.y == 460) {
-                jumping = 0;
+            //réinitialise le double saut quand player atterit
+            if (player.y == 460) {
+                player.jumping = 0;
             }
             
             timestamp++;
-            System.out.print(timestamp+" : ");
-            System.out.println(man.y);
-            System.out.println(jumping);
-        }
-        
-        renderer.repaint();
-    } 
-
-    public void jump() {
-        if (gameOver) {
-            man = new Rectangle(WIDTH/2, HEIGHT/2, 20, 20);
-            columns.clear();
-            ymotion = 0;
-            score = 0;
+            //System.out.print(timestamp+" : ");
+            //System.out.println(player.y);
+            //System.out.println(player.jumping);
             
-            gameOver = false;
-        }
-        if (!started) {
-            started = true;
-        } else if (!gameOver) {
-            if (ymotion > 0) {
-                ymotion = 0;
-            }
-            if(jumping < 2) {
-                jumping++;
-                ymotion -= 10;
-            }
-            
+            renderer.repaint();
         }
     }
     
@@ -192,10 +151,10 @@ public class Game implements ActionListener, MouseListener {
         g.fillRect(0, HEIGHT-120, WIDTH, 20);
         
         g.setColor(Color.red);
-        g.fillRect(man.x, man.y, man.width, man.height);
+        g.fillRect(player.x, player.y, player.width, player.height);
         
-        for (Rectangle column : columns) {
-            paintColumn(g, column);
+        for (Rectangle column : c.columns) {
+            c.paintColumn(g, column);
         }
         
         g.setColor(Color.white);
@@ -204,42 +163,32 @@ public class Game implements ActionListener, MouseListener {
         if (gameOver) {
             g.drawString("GameOver", 75, HEIGHT/2);
         }
-        if (!started) {
+        if (state != STATE.GAME) {
+            //menu.render(g);
             g.drawString("Click to start", 75, HEIGHT/2);
         }
         
         g.setFont(new Font("Arial", 1, 50));
         
-        if(started && !gameOver) {
+        if(state == STATE.GAME && !gameOver) {
             score++;
         }
         String scoreString = "Score : "+ score;
         g.drawString(scoreString, 20, HEIGHT-50);
-        
     }
     
     public static void main(String[] args) {
         runner = new Game(args);
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        jump();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
+    
+    public void mousePressed() {
+        switch (Game.state) {
+            case GAME:
+                player.jump();
+                break;
+            case MENU:
+                //Game.menu.render(g);
+                break;
+        }
     }
 }
