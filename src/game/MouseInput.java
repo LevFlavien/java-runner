@@ -17,16 +17,20 @@ public class MouseInput implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
     }
-    //public Rectangle playButton = new Rectangle(Game.WIDTH / 2 + 120, 200, 100, 50);
-  //  public Rectangle helpButton = new Rectangle(Game.WIDTH / 2 + 120, 300, 100, 50);
-    //public Rectangle quitButton = new Rectangle(Game.WIDTH / 2 + 120, 400, 100, 50);
+    
     @Override
     public void mousePressed(MouseEvent e) {
         if (Game.state == Game.STATE.GAME) {
             Game.runner.mousePressed();
         } else {
+            
+            // -offset
+            int x = e.getX()-3;
+            int y = e.getY()-22;
+            //System.out.println("x: "+x+"; y: "+y);
+            
             //play
-            if (e.getX() >= Game.WIDTH / 2 + 120 && e.getY() <= Game.WIDTH / 2 + 120) {
+            if (Menu.playButton.contains(x, y)){
                 Game.state = Game.STATE.GAME;
             }
         }        

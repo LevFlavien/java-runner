@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import javax.swing.JButton;
 
 /**
  *
@@ -18,9 +17,9 @@ import javax.swing.JButton;
  */
 public class Menu {
     
-    public Rectangle playButton = new Rectangle(Game.WIDTH / 2 + 120, 200, 100, 50);
-    public Rectangle helpButton = new Rectangle(Game.WIDTH / 2 + 120, 300, 100, 50);
-    public Rectangle quitButton = new Rectangle(Game.WIDTH / 2 + 120, 400, 100, 50);
+    public static Rectangle playButton = new Rectangle(Game.WIDTH / 2, 200, 100, 50);
+    public static Rectangle helpButton = new Rectangle(Game.WIDTH / 2, 300, 100, 50);
+    public static Rectangle quitButton = new Rectangle(Game.WIDTH / 2, 400, 100, 50);
     
     public void render(Graphics g) {
         
@@ -30,8 +29,9 @@ public class Menu {
         g.setFont(fnt0);
         g.setColor(Color.white);
         //g.
-        g.drawString("RUNNER", Game.WIDTH / 2, 100);
+        g.drawString("RUNNER", Game.WIDTH / 2 - 60, 100);
         
+        g2d.setColor(Color.blue);
         g.setFont(fnt0.deriveFont(38f));
         g.drawString("Play", playButton.x+10, playButton.y+40);
         g.drawString("Help", helpButton.x+10, helpButton.y+40);

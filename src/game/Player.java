@@ -14,7 +14,7 @@ import java.awt.Rectangle;
 public class Player extends Rectangle {
 
     public int ymotion;
-    public int jumping = 0;
+    public int jumping = 0; // etat du saut 0: au sol, 1: premier saut, 2: double saut
     
     public Player(int x, int y, int width, int height) {
         super(x, y, width, height);

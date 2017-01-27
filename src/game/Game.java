@@ -132,15 +132,12 @@ public class Game implements ActionListener {
             }
             
             timestamp++;
-            //System.out.print(timestamp+" : ");
-            //System.out.println(player.y);
-            //System.out.println(player.jumping);
             
             renderer.repaint();
         }
     }
     
-    void repaint(Graphics g) {
+    void render(Graphics g) {
         g.setColor(Color.cyan);
         g.fillRect(0,0,WIDTH,HEIGHT);
         

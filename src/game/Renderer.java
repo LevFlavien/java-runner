@@ -22,7 +22,7 @@ public class Renderer extends JPanel {
         
         switch (Game.state) {
             case GAME:
-                Game.runner.repaint(g);
+                Game.runner.render(g);
                 break;
             case MENU:
                 Game.menu.render(g);
