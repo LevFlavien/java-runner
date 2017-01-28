@@ -9,81 +9,46 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author Poulet
- */
-public class Game implements ActionListener {
-    
-    public static Game runner;
-    
-    public static Menu menu;
-    
-    public static final int WIDTH = 1300, HEIGHT = 600;
-    
-    public Renderer renderer;
-    
-    public Player player;
+public class Game implements Runnable {
     
     public int ticks, score;
     
     public Controller c;
     
+    public Player player;
+    
     public static boolean gameOver;
     
     public int timestamp = 0;
     
-    public static enum STATE {
-        MENU,
-        GAME,
-    };
-    public static STATE state = STATE.MENU;
-    
-    public Game(Object object) {
-        JFrame jframe = new JFrame();
-        Timer timer = new Timer(20, this);
+    public Game() {
         
-        renderer = new Renderer();
+        System.out.println("init");
         
-        menu = new Menu();
+        c = new Controller(this);
         
-        c = new Controller(runner);
-        
-        jframe.add(renderer);
-        
-        jframe.addMouseListener(new MouseInput());
-        
-        jframe.setTitle("Runner");
-        jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jframe.setSize(WIDTH, HEIGHT);
-        jframe.setResizable(false);
-        jframe.setVisible(true);
-        
-        player = new Player(WIDTH/3, HEIGHT/2, 20, 20);
+        player = new Player(Runner.WIDTH/3, Runner.HEIGHT/2, 20, 20);
         
         score = 0;
+        
+        System.out.println("test");
         
         for (int i = 0; i<5; i++)
         {
             c.addColumn(true);
         }
-        timer.start();
-        
     }
     
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void run() {
         
         int speed = 10;
         
-        if (state == STATE.GAME) {
+        while (Runner.state == Runner.STATE.GAME) {
+            System.out.println("run");
             
             ticks++;
             
@@ -119,11 +84,11 @@ public class Game implements ActionListener {
                 }
             }
             
-            if (player.y >= HEIGHT - 140 || player.y < 0) {
-                player.y = HEIGHT-140;
+            if (player.y >= Runner.HEIGHT - 140 || player.y < 0) {
+                player.y = Runner.HEIGHT-140;
             }
             if (gameOver) {
-                player.y = HEIGHT - 120 - player.height;
+                player.y = Runner.HEIGHT - 120 - player.height;
             }
             
             //réinitialise le double saut quand player atterit
@@ -133,19 +98,26 @@ public class Game implements ActionListener {
             
             timestamp++;
             
-            renderer.repaint();
+            Runner.renderer.repaint();
+            
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
     }
     
     void render(Graphics g) {
         g.setColor(Color.cyan);
-        g.fillRect(0,0,WIDTH,HEIGHT);
+        g.fillRect(0,0,Runner.WIDTH,Runner.HEIGHT);
         
         g.setColor(Color.orange);
-        g.fillRect(0, HEIGHT-120, WIDTH, HEIGHT-120);
+        g.fillRect(0, Runner.HEIGHT-120, Runner.WIDTH, Runner.HEIGHT-120);
         
         g.setColor(Color.green);
-        g.fillRect(0, HEIGHT-120, WIDTH, 20);
+        g.fillRect(0, Runner.HEIGHT-120, Runner.WIDTH, 20);
         
         g.setColor(Color.red);
         g.fillRect(player.x, player.y, player.width, player.height);
@@ -158,34 +130,24 @@ public class Game implements ActionListener {
         g.setFont(new Font("Arial", 1, 100));
         
         if (gameOver) {
-            g.drawString("GameOver", 75, HEIGHT/2);
+            g.drawString("GameOver", 75, Runner.HEIGHT/2);
         }
-        if (state != STATE.GAME) {
+        if (Runner.state != Runner.STATE.GAME) {
             //menu.render(g);
-            g.drawString("Click to start", 75, HEIGHT/2);
+            g.drawString("Click to start", 75, Runner.HEIGHT/2);
         }
         
         g.setFont(new Font("Arial", 1, 50));
         
-        if(state == STATE.GAME && !gameOver) {
+        if(Runner.state == Runner.STATE.GAME && !gameOver) {
             score++;
         }
         String scoreString = "Score : "+ score;
-        g.drawString(scoreString, 20, HEIGHT-50);
-    }
-    
-    public static void main(String[] args) {
-        runner = new Game(args);
+        g.drawString(scoreString, 20, Runner.HEIGHT-50);
     }
     
     public void mousePressed() {
-        switch (Game.state) {
-            case GAME:
-                player.jump();
-                break;
-            case MENU:
-                //Game.menu.render(g);
-                break;
-        }
+        player.jump();
     }
+    
 }

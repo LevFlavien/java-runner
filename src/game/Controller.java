@@ -34,12 +34,12 @@ public class Controller {
         
         if (start)
         {
-            columns.add(new Rectangle(Game.WIDTH + width + columns.size() * 900, Game.HEIGHT - height - 140, width, height));
+            columns.add(new Rectangle(Runner.WIDTH + width + columns.size() * 900, Runner.HEIGHT - height - 140, width, height));
             //columns.add(new Rectangle(WIDTH + width + (columns.size() - 1) * 300, 0, width, HEIGHT - height - space));
         }
         else
         {
-            columns.add(new Rectangle(columns.get(columns.size()-1).x + 600, Game.HEIGHT - height - 120, width, height));
+            columns.add(new Rectangle(columns.get(columns.size()-1).x + 600, Runner.HEIGHT - height - 120, width, height));
             //columns.add(new Rectangle(columns.get(columns.size() - 1).x, 0, width+100, HEIGHT - height - space));
         }
     }

@@ -17,9 +17,9 @@ import java.awt.Rectangle;
  */
 public class Menu {
     
-    public static Rectangle playButton = new Rectangle(Game.WIDTH / 2, 200, 100, 50);
-    public static Rectangle helpButton = new Rectangle(Game.WIDTH / 2, 300, 100, 50);
-    public static Rectangle quitButton = new Rectangle(Game.WIDTH / 2, 400, 100, 50);
+    public static Rectangle playButton = new Rectangle(Runner.WIDTH / 2, 200, 100, 50);
+    public static Rectangle helpButton = new Rectangle(Runner.WIDTH / 2, 300, 100, 50);
+    public static Rectangle quitButton = new Rectangle(Runner.WIDTH / 2, 400, 100, 50);
     
     public void render(Graphics g) {
         
@@ -29,7 +29,7 @@ public class Menu {
         g.setFont(fnt0);
         g.setColor(Color.white);
         //g.
-        g.drawString("RUNNER", Game.WIDTH / 2 - 60, 100);
+        g.drawString("RUNNER", Runner.WIDTH / 2 - 60, 100);
         
         g2d.setColor(Color.blue);
         g.setFont(fnt0.deriveFont(38f));

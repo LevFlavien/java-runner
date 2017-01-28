@@ -20,12 +20,12 @@ public class Renderer extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        switch (Game.state) {
+        switch (Runner.state) {
             case GAME:
-                Game.runner.render(g);
+                Runner.game.render(g);
                 break;
             case MENU:
-                Game.menu.render(g);
+                Runner.menu.render(g);
                 break;
         }
         

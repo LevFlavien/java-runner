@@ -20,8 +20,8 @@ public class MouseInput implements MouseListener {
     
     @Override
     public void mousePressed(MouseEvent e) {
-        if (Game.state == Game.STATE.GAME) {
-            Game.runner.mousePressed();
+        if (Runner.state == Runner.STATE.GAME) {
+            Runner.game.mousePressed();
         } else {
             
             // -offset
@@ -31,7 +31,8 @@ public class MouseInput implements MouseListener {
             
             //play
             if (Menu.playButton.contains(x, y)){
-                Game.state = Game.STATE.GAME;
+                Runner.state = Runner.STATE.GAME;
+                Runner.start();
             }
         }        
     }

@@ -22,17 +22,12 @@ public class Player extends Rectangle {
     }
     
     public void jump() {
-        if (Game.state != Game.STATE.GAME) {
-            Game.state = Game.STATE.GAME;
-        } else {
-            if (ymotion > 0) {
-                ymotion = 0;
-            }
-            if(jumping < 2) {
-                jumping++;
-                ymotion -= 10;
-            }
-            
+        if (ymotion > 0) {
+            ymotion = 0;
+        }
+        if(jumping < 2) {
+            jumping++;
+            ymotion -= 10;
         }
     }
     
