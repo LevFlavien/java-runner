@@ -4,6 +4,8 @@ package game;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * MouseInput.java
@@ -28,7 +30,12 @@ public class MouseInput implements MouseListener {
                 if (Menu.playButton.contains(x, y)){
                     Runner.state = Runner.STATE.GAME;
                     Runner.start();
-                } else if (Menu.quitButton.contains(x,y)) {
+                }
+                else if (Menu.hiscoreButton.contains(x,y))
+                {
+                	JOptionPane.showMessageDialog(null, "Le score le plus haut est actuellment "+HighScore.getHighScore());
+                }
+                else if (Menu.quitButton.contains(x,y)) {
                     Runner.quit();
                 }
         } else {

@@ -13,9 +13,9 @@ import java.awt.Rectangle;
  */
 public class Menu {
     
-    public static Rectangle playButton = new Rectangle(Runner.WIDTH / 2, 200, 100, 50);
-    public static Rectangle hiscoreButton = new Rectangle(Runner.WIDTH / 2, 300, 100, 50);
-    public static Rectangle quitButton = new Rectangle(Runner.WIDTH / 2, 400, 100, 50);
+    public static Rectangle playButton = new Rectangle(Runner.WIDTH / 2, 200, 140, 50);
+    public static Rectangle hiscoreButton = new Rectangle(Runner.WIDTH / 2, 300, 140, 50);
+    public static Rectangle quitButton = new Rectangle(Runner.WIDTH / 2, 400, 140, 50);
     
     public void render(Graphics g) {
         
@@ -30,7 +30,7 @@ public class Menu {
         g2d.setColor(Color.blue);
         g.setFont(fnt0.deriveFont(38f));
         g.drawString("Play", playButton.x+10, playButton.y+40);
-        g.drawString("Help", hiscoreButton.x+10, hiscoreButton.y+40);
+        g.drawString("Score", hiscoreButton.x+10, hiscoreButton.y+40);
         g.drawString("Quit", quitButton.x+10, quitButton.y+40);
         g2d.draw(playButton);
         g2d.draw(hiscoreButton);

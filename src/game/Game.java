@@ -127,6 +127,7 @@ public class Game implements Runnable {
         
         if (Runner.state == Runner.STATE.OVER) {
             g.drawString("GameOver", 75, Runner.HEIGHT/2);
+            HighScore.setHighScore(score);
         }
         
         g.setFont(new Font("Arial", 1, 50));

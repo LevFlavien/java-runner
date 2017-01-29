@@ -6,3 +6,9 @@ nbdist/
 .nb-gradle/
 build.xml
 manifest.mf
+/bin/
+*.project
+*.classpath
+.project
+.classpath
+score.txt
