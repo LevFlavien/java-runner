@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package game;
 
 import javax.swing.JFrame;
 
 /**
  *
- * @author Poulet
+ * Runner.java
+ * Classe principale
+ * Instancie la vue, le MouseListener, démarre le thread du jeu
  */
 public class Runner {
     
@@ -21,11 +19,15 @@ public class Runner {
     
     public static final int WIDTH = 1300, HEIGHT = 600;
     
+    public static Thread t;
+    
     public static Renderer renderer;
     
     public static enum STATE {
         MENU,
+        HISCORE,
         GAME,
+        OVER
     };
     public static STATE state = STATE.MENU;
     
@@ -35,8 +37,6 @@ public class Runner {
         renderer = new Renderer();
         
         menu = new Menu();
-        
-        game = new Game();
         
         jframe.add(renderer);
         
@@ -50,8 +50,13 @@ public class Runner {
     }
     
     public static void start() {
-        Thread t = new Thread(game);
+        game = new Game(); // nouvelle instance de Game crée à chaque nouveau démarrage
+        t = new Thread(game);
         t.start();
+    }
+    
+    public static void quit() {
+        System.exit(0);
     }
     
     public static void main(String[] args) {

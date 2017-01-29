@@ -1,16 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package game;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+/**
+ *
+ * @author Poulet
+ */
 
 public class Game implements Runnable {
     
@@ -20,21 +22,15 @@ public class Game implements Runnable {
     
     public Player player;
     
-    public static boolean gameOver;
-    
     public int timestamp = 0;
     
     public Game() {
         
-        System.out.println("init");
-        
         c = new Controller(this);
         
-        player = new Player(Runner.WIDTH/3, Runner.HEIGHT/2, 20, 20);
+        player = new Player(Runner.WIDTH/3, Runner.HEIGHT/2, 20, 40);
         
         score = 0;
-        
-        System.out.println("test");
         
         for (int i = 0; i<5; i++)
         {
@@ -46,9 +42,8 @@ public class Game implements Runnable {
     public void run() {
         
         int speed = 10;
-        
+        System.out.println("Game.run()");
         while (Runner.state == Runner.STATE.GAME) {
-            System.out.println("run");
             
             ticks++;
             
@@ -57,7 +52,7 @@ public class Game implements Runnable {
                 column.x -= speed;
             }
 
-            if (ticks % 2 == 0 && player.ymotion < 15){
+            if (ticks % 2 == 0 && player.ymotion < 15) {
                 player.ymotion += 2;
             }
 
@@ -73,22 +68,21 @@ public class Game implements Runnable {
                     }
                 }
             }
-
+            
+            // actuallise la position
             player.y += player.ymotion;
 
             for (Rectangle column : c.columns) {
                 if (column.intersects(player)) {
-                    gameOver = true;
+                    Runner.state = Runner.STATE.OVER;
                     
                     player.x = column.x - player.width;
                 }
             }
             
-            if (player.y >= Runner.HEIGHT - 140 || player.y < 0) {
-                player.y = Runner.HEIGHT-140;
-            }
-            if (gameOver) {
-                player.y = Runner.HEIGHT - 120 - player.height;
+            // stoppe player au niveau du sol
+            if (player.y >= Runner.HEIGHT - 160 || player.y < 0) {
+                player.y = Runner.HEIGHT-160;
             }
             
             //réinitialise le double saut quand player atterit
@@ -98,15 +92,17 @@ public class Game implements Runnable {
             
             timestamp++;
             
+            // actualise le rendu
             Runner.renderer.repaint();
             
             try {
-                Thread.sleep(20);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+        Runner.renderer.repaint();
+        System.out.println("Game.run() end");
     }
     
     void render(Graphics g) {
@@ -129,25 +125,37 @@ public class Game implements Runnable {
         g.setColor(Color.white);
         g.setFont(new Font("Arial", 1, 100));
         
-        if (gameOver) {
+        if (Runner.state == Runner.STATE.OVER) {
             g.drawString("GameOver", 75, Runner.HEIGHT/2);
-        }
-        if (Runner.state != Runner.STATE.GAME) {
-            //menu.render(g);
-            g.drawString("Click to start", 75, Runner.HEIGHT/2);
         }
         
         g.setFont(new Font("Arial", 1, 50));
         
-        if(Runner.state == Runner.STATE.GAME && !gameOver) {
+        if(Runner.state == Runner.STATE.GAME) {
             score++;
         }
         String scoreString = "Score : "+ score;
         g.drawString(scoreString, 20, Runner.HEIGHT-50);
     }
     
-    public void mousePressed() {
-        player.jump();
+    public void mousePressed(MouseEvent e) {
+        System.out.println("clicked");
+        switch (Runner.state) {
+            case GAME:
+                System.out.println(Runner.state);
+                // si clic droit
+                if (e.getButton() == 1) {
+                    player.jump();
+                } else {
+                    player.crouch();
+                }
+                break;
+            case OVER:
+                System.out.println(Runner.state);
+                Runner.state = Runner.STATE.MENU;
+                Runner.renderer.repaint();
+                break;
+        }
     }
     
 }

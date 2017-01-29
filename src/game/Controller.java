@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package game;
 
 import java.awt.Color;
@@ -13,7 +9,9 @@ import java.util.Random;
 
 /**
  *
- * @author flevesque
+ * Controller.java
+ * Controleur
+ * Génère les obstacles et powerups
  */
 public class Controller {
     
@@ -43,7 +41,7 @@ public class Controller {
             //columns.add(new Rectangle(columns.get(columns.size() - 1).x, 0, width+100, HEIGHT - height - space));
         }
     }
-        
+      
     public void paintColumn(Graphics g, Rectangle column) {
         g.setColor(Color.green.darker());
         g.fillRect(column.x, column.y, column.width, column.height);
