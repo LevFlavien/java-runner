@@ -74,15 +74,15 @@ class Game implements Runnable {
             }
 
             // réinitialise le double saut quand player atterit
-            if (player.y == 460) {
+            if (player.y == 440) {
                 player.jumping = 0;
             }
-
+            System.out.println(player.y);
             // actualise le rendu
             Runner.renderer.repaint();
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(20);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -22,7 +22,7 @@ class MouseInput implements MouseListener {
                 Runner.state = Runner.STATE.GAME;
                 Runner.start();
             } else if (Menu.hiscoreButton.contains(x, y)) {
-                JOptionPane.showMessageDialog(null, "Le score le plus haut est actuellement " + HighScore.getHighScore());
+                Runner.menu.displayScores();
             } else if (Menu.quitButton.contains(x, y)) {
                 Runner.quit();
             }

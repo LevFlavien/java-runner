@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.*;
+import javax.swing.JOptionPane;
 
 /**
  * Menu.java
@@ -28,5 +29,9 @@ class Menu {
         g2d.draw(playButton);
         g2d.draw(hiscoreButton);
         g2d.draw(quitButton);
+    }
+    
+    public void displayScores() {
+        JOptionPane.showMessageDialog(null, "Le score le plus haut est actuellement " + HighScore.getHighScore());
     }
 }
