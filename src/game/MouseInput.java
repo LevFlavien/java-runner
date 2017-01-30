@@ -1,47 +1,35 @@
-
 package game;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JOptionPane;
-
 /**
- *
  * MouseInput.java
- * 
  */
-public class MouseInput implements MouseListener {
-    
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-    
+class MouseInput implements MouseListener {
+
     @Override
     public void mousePressed(MouseEvent e) {
         if (Runner.state == Runner.STATE.MENU) {
             System.out.println(Runner.state);
-                // -offset
-                int x = e.getX()-3;
-                int y = e.getY()-22;
-                //System.out.println("x: "+x+"; y: "+y);
 
-                //play
-                if (Menu.playButton.contains(x, y)){
-                    Runner.state = Runner.STATE.GAME;
-                    Runner.start();
-                }
-                else if (Menu.hiscoreButton.contains(x,y))
-                {
-                	JOptionPane.showMessageDialog(null, "Le score le plus haut est actuellment "+HighScore.getHighScore());
-                }
-                else if (Menu.quitButton.contains(x,y)) {
-                    Runner.quit();
-                }
+            int x = e.getX() - 3;
+            int y = e.getY() - 22;
+
+            //play
+            if (Menu.playButton.contains(x, y)) {
+                Runner.state = Runner.STATE.GAME;
+                Runner.start();
+            } else if (Menu.hiscoreButton.contains(x, y)) {
+                JOptionPane.showMessageDialog(null, "Le score le plus haut est actuellement " + HighScore.getHighScore());
+            } else if (Menu.quitButton.contains(x, y)) {
+                Runner.quit();
+            }
         } else {
             Runner.game.mousePressed(e);
         }
-        
+
     }
 
     @Override
@@ -55,5 +43,9 @@ public class MouseInput implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
-    
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
 }
