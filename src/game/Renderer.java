@@ -1,22 +1,18 @@
-
 package game;
 
-import java.awt.Graphics;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
- *
  * Renderer.java
  * Effectue le rendu
  */
-public class Renderer extends JPanel {
-
-    private static final long serialVersionUID = 1L;
+class Renderer extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         switch (Runner.state) {
             case GAME:
             case OVER:
@@ -30,8 +26,8 @@ public class Renderer extends JPanel {
             case HISCORE:
                 break;
         }
-        
+
     }
-    
-    
+
+
 }
