@@ -14,13 +14,14 @@ class Runner {
 
     public static Menu menu;
     public static Renderer renderer;
+    
     public static STATE state = STATE.MENU;
 
     private Runner() {
         JFrame jframe = new JFrame();
 
         renderer = new Renderer();
-
+        
         menu = new Menu();
 
         jframe.add(renderer);
@@ -37,7 +38,9 @@ class Runner {
     public static void start() {
         game = new Game(); // nouvelle instance de Game crée à chaque nouveau démarrage
         Thread t = new Thread(game);
+        Thread t2 = new Thread(renderer);
         t.start();
+        t2.start();
     }
 
     public static void quit() {

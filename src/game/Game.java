@@ -39,7 +39,7 @@ class Game implements Runnable {
                 Rectangle column = c.columns.get(i);
                 column.x -= speed;
             }
-
+            System.out.println(player.ymotion);
             if (ticks % 2 == 0 && player.ymotion < 15) {
                 player.ymotion += 2;
             }
@@ -72,23 +72,23 @@ class Game implements Runnable {
             if (player.y >= Runner.HEIGHT - 160 || player.y < 0) {
                 player.y = Runner.HEIGHT - 160;
             }
-
+            System.out.println(Runner.HEIGHT - 160);
             // réinitialise le double saut quand player atterit
-            if (player.y == 460) {
+            if (player.y == 440) {
                 player.jumping = 0;
             }
 
             // actualise le rendu
-            Runner.renderer.repaint();
+            //Runner.renderer.repaint();
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(20);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        Runner.renderer.repaint();
+        //Runner.renderer.repaint();
         System.out.println("Game.run() end");
     }
 
@@ -140,7 +140,7 @@ class Game implements Runnable {
             case OVER:
                 System.out.println(Runner.state);
                 Runner.state = Runner.STATE.MENU;
-                Runner.renderer.repaint();
+                //Runner.renderer.repaint();
                 break;
         }
     }
