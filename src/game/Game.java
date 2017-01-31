@@ -68,15 +68,17 @@ class Game implements Runnable {
                 }
             }
 
-            // stoppe player au niveau du sol
-            if (player.y >= Runner.HEIGHT - 160 || player.y < 0) {
+            // stoppe player au niveau du sol en fonction de sa position
+            if ((player.y >= Runner.HEIGHT - 160 || player.y < 0)&&!player.crouched) {
                 player.y = Runner.HEIGHT - 160;
-            }
-
-            // réinitialise le double saut quand player atterit
-            if (player.y == 440) {
                 player.jumping = 0;
             }
+            else if ((player.y >= Runner.HEIGHT - 140 || player.y < 0)&&player.crouched)
+            {
+                player.y = Runner.HEIGHT - 140;
+                player.jumping = 0;
+            }
+
             System.out.println(player.y);
             // actualise le rendu
             Runner.renderer.repaint();
