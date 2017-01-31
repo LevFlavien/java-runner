@@ -2,6 +2,7 @@ package game;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import static java.lang.Math.round;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +16,7 @@ class Game implements Runnable {
     private final Player player;
     private int ticks;
     private int score;
+    private int level = 0;
 
     public Game() {
 
@@ -23,7 +25,7 @@ class Game implements Runnable {
         score = 0;
 
         for (int i = 0; i < 5; i++) {
-            c.addColumn(true);
+            c.addColumn(0);
         }
     }
 
@@ -43,16 +45,22 @@ class Game implements Runnable {
             if (ticks % 2 == 0 && player.ymotion < 15) {
                 player.ymotion += 2;
             }
-
+            
+            // incrémente le niveau tout les 500 ticks
+            if (ticks % 250 == 0) {
+                level++;
+                speed = (int)round(speed * 1.2);
+            }
+            
             for (int i = 0; i < c.columns.size(); i++) {
                 Rectangle column = c.columns.get(i);
 
                 if (column.x + column.width < 0) {
                     c.columns.remove(column);
-                    c.addColumn(false);
+                    c.addColumn(1);
 
                     if (column.y == 0) {
-                        c.addColumn(false);
+                        c.addColumn(1);
                     }
                 }
             }
@@ -124,6 +132,9 @@ class Game implements Runnable {
         }
         String scoreString = "Score : " + score;
         g.drawString(scoreString, 20, Runner.HEIGHT - 50);
+        
+        String levelString = "Level : " + level;
+        g.drawString(levelString, Runner.WIDTH - 250, Runner.HEIGHT - 50);
     }
 
     public void mousePressed(MouseEvent e) {
