@@ -21,8 +21,6 @@ class Renderer extends JPanel {
             case MENU:
                 Runner.menu.render(g);
                 break;
-            case HISCORE:
-                break;
         }
 
     }

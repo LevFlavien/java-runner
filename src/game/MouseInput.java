@@ -13,7 +13,7 @@ class MouseInput implements MouseListener {
     public void mousePressed(MouseEvent e) {
         if (Runner.state == Runner.STATE.MENU) {
             System.out.println(Runner.state);
-
+            System.out.println(e.getButton());
             int x = e.getX() - 3;
             int y = e.getY() - 22;
 
@@ -21,7 +21,7 @@ class MouseInput implements MouseListener {
             if (Menu.playButton.contains(x, y)) {
                 Runner.state = Runner.STATE.GAME;
                 Runner.start();
-            } else if (Menu.hiscoreButton.contains(x, y)) {
+            } else if (Menu.highscoreButton.contains(x, y)) {
                 Runner.menu.displayScores();
             } else if (Menu.quitButton.contains(x, y)) {
                 Runner.quit();
@@ -34,6 +34,7 @@ class MouseInput implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        Runner.game.mouseReleased(e);
     }
 
     @Override

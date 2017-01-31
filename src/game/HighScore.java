@@ -5,8 +5,9 @@ import java.io.*;
 class HighScore {
 
     private static final File scoreFile = new File("score.txt");
-
-    public static int getHighScore() {
+    
+    // Récupère le score présent dans le fichier score.txt
+    public static int getHighScore() { 
         int currentHighScore = 0;
 
         if (!scoreFile.exists()) {
@@ -32,7 +33,8 @@ class HighScore {
 
         return currentHighScore;
     }
-
+    
+    //
     public static void setHighScore(int score) {
         if (score > getHighScore()) {
             System.out.println("NEW HIGHSCORE" + score + getHighScore());

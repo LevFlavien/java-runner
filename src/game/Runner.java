@@ -50,7 +50,6 @@ class Runner {
 
     public enum STATE {
         MENU,
-        HISCORE,
         GAME,
         OVER
     }

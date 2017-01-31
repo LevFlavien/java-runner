@@ -13,8 +13,6 @@ import java.util.Random;
  */
 public class Controller {
     
-    Game game;
-    
     public ArrayList<Rectangle> columns = new ArrayList<>();
     public Random random = new Random();
     

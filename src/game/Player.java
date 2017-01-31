@@ -28,11 +28,22 @@ class Player extends Rectangle {
 
     // fait se baisser player
     public void crouch() {
-        crouched = true;
-        this.height -= 20;
-        this.y += 20;
-        //this.ymotion -= 10;
-        System.out.println("CROUCHED : " + height);
+    	if (!crouched) {
+            this.height -= 20;
+            this.y = 460;
+            System.out.println("CROUCHED : " + height);
+            this.crouched = true;
+    	} else {
+            uncrouch();
+        }
     }
-
+    
+    public void uncrouch() {
+        if (crouched) {
+            this.crouched = false;
+            this.height += 20;
+            this.y = 440;
+        }
+    }
+    
 }

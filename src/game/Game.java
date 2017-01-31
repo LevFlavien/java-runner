@@ -33,7 +33,7 @@ class Game implements Runnable {
     public void run() {
         int speed = 10;
         System.out.println("Game.run()");
-
+        
         while (Runner.state == Runner.STATE.GAME) {
             ticks++;
 
@@ -47,7 +47,7 @@ class Game implements Runnable {
             }
             
             // incrémente le niveau tout les 500 ticks
-            if (ticks % 250 == 0) {
+            if (ticks % 500 == 0) {
                 level++;
                 speed = (int)round(speed * 1.2);
             }
@@ -76,18 +76,19 @@ class Game implements Runnable {
                 }
             }
 
-            // stoppe player au niveau du sol
-            if (player.y >= Runner.HEIGHT - 160 || player.y < 0) {
+            // stoppe player au niveau du sol en fonction de sa position
+            if ((player.y >= Runner.HEIGHT - 160 || player.y < 0) && !player.crouched) {
                 player.y = Runner.HEIGHT - 160;
-            }
-
-            // réinitialise le double saut quand player atterit
-            if (player.y == 440) {
+                player.jumping = 0;
+            } else if ((player.y >= Runner.HEIGHT - 140 || player.y < 0) && player.crouched) {
+                player.y = Runner.HEIGHT - 140;
                 player.jumping = 0;
             }
-            System.out.println(player.y);
-            // actualise le rendu
-            Runner.renderer.repaint();
+            
+            // actualise le rendu tout les deux ticks
+            if (ticks % 2 == 0) {
+                Runner.renderer.repaint();
+            }
 
             try {
                 Thread.sleep(20);
@@ -142,9 +143,11 @@ class Game implements Runnable {
         switch (Runner.state) {
             case GAME:
                 System.out.println(Runner.state);
-                if (e.getButton() == 1) {   // si clic droit
+                // si clic gauche
+                if (e.getButton() == 1) {
                     player.jump();
-                } else {
+                    player.uncrouch();
+                } else if (player.jumping == 0) {
                     player.crouch();
                 }
                 break;
@@ -154,6 +157,17 @@ class Game implements Runnable {
                 Runner.renderer.repaint();
                 break;
         }
+    }
+    
+    public void mouseReleased(MouseEvent e) {
+        // si clic droit pendant l'état de jeu
+        if (e.getButton() == 3 && player.crouched) {
+            player.crouch();
+        }
+    }
+    
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("a");
     }
 
 }
